@@ -1,0 +1,15 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t mayank4396/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run mayank4396/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t mayank4396/multi-client ./client
+  - docker build -t mayank4396/multi-nginx ./nginx
+  - docker build -t mayank4396/multi-server ./server
+  - docker build -t mayank4396/multi-worker ./worker
